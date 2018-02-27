@@ -10,10 +10,20 @@
 		a{
 			margin-left: 20px;
 		}
+		.del{
+			cursor: pointer;
+		}
+		#selectResult{
+			margin-left: 10px;
+		}
+		#selectResult span{
+			margin-left: 20px;
+		}
 	</style>
 	<body>
 		<div>
 			<span>你的选择</span>
+			<span id="selectResult"></span>
 		</div>
 		<ul id="type">
 			
@@ -88,7 +98,6 @@
 
 					var parent = this.parentNode;
 					choseObj[parent.index] = this.innerText;
-					console.log(choseObj)
 					if(parent.prevA){
 						parent.prevA.style.color = '';
 					}
@@ -96,6 +105,7 @@
 					parent.prevA = this;
 					this.style.color = 'red';
 
+					createChooseHtml();
 				}
 			}
 		}
@@ -104,7 +114,34 @@
 			3.生成选择结构，并对结构排序 ，点击同一行筛选条件只能有一个
 		*/
 		var choseObj = {};
+		var selectResult = $('selectResult');
+		/*
+			生成筛选条件的函数
+		*/
+		function createChooseHtml(){
+			var selectA = null;
+			var html = '';
+			for(var i=0;i<lis.length;i++){
+				if(choseObj[i]){
+					//data-index 添加属性
+					html += '<span>'+ choseObj[i] +'<b data-index="'+ i +'" class="del">x</b></span>';
+				}
+			}
+			selectResult.innerHTML = html;
 
+			/*
+			点击x，删除对应的内容
+			*/
+			var chooseA = selectResult.getElementsByTagName('b');
+			for(var d=0;d<chooseA.length;d++){
+				chooseA[d].onclick = function(){
+					this.parentNode.parentNode.removeChild(this.parentNode);
+
+					delete choseObj[this.dataset.index];
+					lis[this.dataset.index].prevA.style.color = ''; 
+				}
+			}
+		}
 
 
 
