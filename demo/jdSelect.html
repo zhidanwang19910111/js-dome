@@ -52,6 +52,44 @@
 				data: ['联通3G','双卡单4G','双卡双4g','联通4g']
 			}
 		]
+		var shopList = [
+			{
+				imgUrl: '',
+				size: '4.0-4.5英寸',
+				system: 'ios',
+				www: '联通3G',
+				name: '苹果',
+				volume: 1000,
+				price: 100
+			},
+			{
+				imgUrl: '',
+				size: '4.0-4.5英寸',
+				system: 'ios',
+				www: '联通3G',
+				name: '苹果',
+				volume: 1000,
+				price: 100
+			},
+			{
+				imgUrl: '',
+				size: '4.0-4.5英寸',
+				system: 'ios',
+				www: '联通3G',
+				name: '小米',
+				volume: 1000,
+				price: 100
+			},
+			{
+				imgUrl: '',
+				size: '4.0-4.5英寸',
+				system: 'ios',
+				www: '联通3G',
+				name: '锤子',
+				volume: 1000,
+				price: 100
+			}
+		]
 
 		function createEle(ele){
 			return document.createElement(ele);
@@ -106,6 +144,11 @@
 					this.style.color = 'red';
 
 					createChooseHtml();
+
+					//存一下筛选的值
+					filterObj[filterChoose[parent.index]] = this.innerText;
+					//筛选出想要的数据
+					filterHandle();
 				}
 			}
 		}
@@ -142,6 +185,25 @@
 				}
 			}
 		}
+		/*
+			筛选
+		*/
+		var filterChoose = ['name','size','system','www'];//筛选条件
+
+		var filterObj = {};
+
+
+		function filterHandle(){
+			
+			var filterArr = shopList;
+			for(var attr in filterObj){
+				filterArr = filterArr.filter(function(obj){
+					return obj[attr] === filterObj[attr];
+				});
+			}
+			console.log(shopList)
+			console.log(JSON.stringify(filterArr,null,3));
+		} 
 
 
 
