@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>拖拽文件</title>
+	<style>
+		.allContent,#del{
+			width:400px;
+			margin:0 auto;
+		}
+		ul{
+			list-style: none;
+			width:400px;
+			
+			margin: 10px auto;
+
+		}
+		li{
+			border-top:1px solid #dddddd;
+		}
+		#tips{
+			position: absolute;
+			left: 0;
+			top: 0;
+			background: #dddddd;
+		}
+		#delBox{
+			position: absolute;
+			left:100px;
+			top:300px;
+			background: #dddddd;
+		}
+	</style>
+	<body>
+		<div id="del">
+			<button>删除</button>
+		</div>
+		<div class="allContent">
+			全选<input type="checkbox" id="checkAll">
+		</div>
+		<ul id="emailList">
+			<!-- <li>
+				<input type="checkbox">
+				<div>
+					<span></span>
+					<span></span>
+				</div>
+				<p></p>
+			</li> -->
+		</ul>
+		<div id="tips">删除数据</div>
+		<div id="delBox">删除箱子</div>
+	</body>
+	<script src="../js/dan.js"></script>
+	<script>
+		/*
+			1.根据数据结构生成html	
+		*/
+		let list = [
+			{
+				id: '0',
+				caption: 'dan课堂',
+				time: '2015-12-30',
+				desc: '拖拽'
+			},
+			{
+				id: '1',
+				caption: 'dan课堂',
+				time: '2015-12-30',
+				desc: '拖拽'
+			},
+			{
+				id: '2',
+				caption: 'dan课堂',
+				time: '2015-12-30',
+				desc: '拖拽'
+			},
+			{
+				id: '3',
+				caption: 'dan课堂',
+				time: '2015-12-30',
+				desc: '拖拽'
+			}
+		]
+
+		//数组的map方法
+		var html = list.map(function(item){
+			return `
+				<li>
+				<input data-id=${item.id} type="checkbox">
+				<div>
+					<span>${item.caption}</span>
+					<span>${item.time}</span>
+				</div>
+				<p>${item.desc}</p>
+			</li>	
+			`;
+		})
+		$('emailList').innerHTML = html.join('');
+
+		/*
+		实现列表的单选，全选功能
+		*/
+		var checkAll = $('checkAll');
+		var emailList = $('emailList');
+
+		var iptSingle = emailList.getElementsByTagName('input');
+		var iptSingleLen = iptSingle.length;
+		//全选
+		checkAll.onclick = function(){
+			for(var i=0;i<iptSingleLen;i++){
+				iptSingle[i].checked = this.checked;
+				if(this.checked){
+					iptSingle[i].parentNode.style.backgroundColor = '#DDDDDD';
+				}else{
+					iptSingle[i].parentNode.style.backgroundColor = '';
+				}
+				
+			}
+		}
+		//单选
+		for(var i=0;i<iptSingleLen;i++){
+			iptSingle[i].onclick = function(){
+				if(!this.checked){
+					checkAll.checked = false;
+					this.parentNode.style.backgroundColor = '';
+				}else{
+					//查看其它的input是否选中
+					this.parentNode.style.backgroundColor = '#DDDDDD';
+					var ntime = 0;
+					for(var j=0;j<iptSingleLen;j++){
+						if(iptSingle[j].checked){
+							ntime++;
+						}
+					}
+					if(ntime == iptSingleLen){
+						checkAll.checked = true;
+					}
+				}
+
+			}
+			iptSingle[i].onmousedown = function(ev){
+				ev.stopPropagation();
+			}
+			iptSingle[i].onmouseup = function(ev){
+				ev.stopPropagation();
+			}
+		}
+
+		/*
+		删除
+		*/
+		var del = $('del');
+		del.onclick = function(){
+			delData();
+		};
+		/*
+			删除数据和结构
+		*/
+		function delData(){
+			//删除结构 && 删除数据
+			var selectArr = whoSelect();
+			for(var i=0;i<selectArr.length;i++){
+				selectArr[i].parentNode.parentNode.removeChild(selectArr[i].parentNode);
+				for(var j=0;j<list.length;j++){
+					if(list[j].id == selectArr[i].dataset.id){
+						//删除list的数据
+						list.splice(j,1);
+						iptSingleLen--;
+					}
+				}
+			}
+		}
+		/*
+		用来获取选中的input
+		*/
+		function whoSelect(){
+			var arr = [];
+			for(var i=0;i<iptSingleLen;i++){
+				if(iptSingle[i].checked){
+					arr.push(iptSingle[i])
+				}
+			}
+			return arr;
+		}
+
+		/*
+		在某一个li mouseDown的时候删除提醒框出现
+		*/
+		var liList = emailList.getElementsByTagName('li');
+		var tips = $('tips');
+		tips.style.display = 'none';
+		var delBox = $('delBox');
+		var isCollision = false;//默认没有碰上
+		for(var j=0;j<liList.length;j++){
+
+			
+
+			liList[j].onmousedown = function(ev){
+				var inputele = this.getElementsByTagName('input')[0];
+				if(!inputele.checked){
+					return;
+				}
+				var seletArr = whoSelect();
+				tips.style.display = 'block';
+				tips.innerHTML = `${seletArr.length}封邮件`
+				tips.style.left = ev.clientX+ 5 + 'px';
+				tips.style.top = ev.clientY + 5 +'px';
+			}
+			document.onmousemove = function(ev){
+				tips.style.left = ev.clientX + 'px';
+				tips.style.top = ev.clientY + 'px';
+
+				//取消默认行为
+				ev.preventDefault();
+
+				//碰撞检测 判断是否和删除箱子碰上了
+				console.log(collision(tips, delBox))
+				if(collision(tips, delBox)){
+					tips.style.display = 'none';
+					isCollision = true;
+
+				}
+			}
+			document.onmouseup = function(){
+				tips.style.display = 'none';
+				if(isCollision){
+					//删除结构和数据
+					delData();
+					isCollision = false;
+				}
+
+				// document.onmousemove = document.onmouseup = null; 
+			}
+		}
+
+		/*
+		碰撞检测函数
+		*/
+		function collision(obj1, obj2){
+			return parseInt(getStyle(obj1, 'left')) < parseInt(getStyle(obj2, 'left')) ? true : false;
+		}
+
+
+
+	</script>
+</html>
