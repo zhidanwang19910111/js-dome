@@ -9,19 +9,43 @@
 			width:40px;
 			cursor: pointer;
 		}
+		#list{
+			margin-top: 20px;
+		}
+		ul{
+			width: 400px;
+		}
+		li{
+			border-top: 1px solid #dcdcdc;
+		}
+		#tips{
+			display: none;
+			position: absolute;
+			left: 0;
+			top: 0;
+			background: #dcdcdc;
+		}
+		.wrap{
+			width: 400px;
+			margin: 20px auto;
+		}
 	</style>
 	<body>
-		<div id="del"><span>删除</span></div>
-		<div>
-			<span>全选</span>
-			<input type="checkbox" id="checkAll">
+		<div class="wrap">
+			<div id="del"><botton>删除</botton></div>
+			<div>
+				<span>全选</span>
+				<input type="checkbox" id="checkAll">
+			</div>
+			<ul id="list">
+				<!-- <li>
+					<input type="checkbox">
+					<span>内容</span>
+				</li> -->
+			</ul>
+			
 		</div>
-		<ul id="list">
-			<!-- <li>
-				<input type="checkbox">
-				<span>内容</span>
-			</li> -->
-		</ul>
+		<div id="tips"></div>
 	</body>
 	<script src="../js/dan.js"></script>
 	<script>
@@ -54,14 +78,19 @@
 		//根据数据生成html
 		
 		var list = $('list')
-		listInit(listData);
+		var innerList = listData;
+		listInit(innerList);
 		function listInit(listData){
 			var listHtml = '';
 			for(var i=0;i<listData.length;i++){
 			listHtml += `
-				<li>
-					<input class="checkSingle" type="checkbox">
-					<span>${listData[i].desc}</span>
+				<li class="listLi">
+					<input class="checkSingle" data-id=${listData[i].id} type="checkbox">
+					<div>
+						<span>${listData[i].desc}</span>
+						<span>${listData[i].time}</span>
+					</div>
+					
 				</li>
 			`
 			}
@@ -77,6 +106,7 @@
 			
 			for(var i=0;i<checkSingle.length;i++){
 				checkSingle[i].checked = this.checked;
+				checkSingle[i].parentNode.style.background =this.checked ? '#dcdcdc' : '';
 			}
 		}
 
@@ -86,8 +116,10 @@
 			checkSingle[j].onclick = function(){
 				if(!this.checked){
 					checkAll.checked = false;
+					this.parentNode.style.background = '';
 				}else{
 					this.cleckAllFlag = false;
+					this.parentNode.style.background = '#dcdcdc';
 					for(var k=0;k<checkSingle.length;k++){
 						if(!checkSingle[k].checked){
 							this.cleckAllFlag = true;
@@ -97,25 +129,73 @@
 					checkAll.checked = this.cleckAllFlag ? false : true;
 				}
 			}
+
+			checkSingle[j].onmousedown = function(ev){
+				ev.stopPropagation();
+			}
+			checkSingle[j].onmouseup = function(ev){
+				ev.stopPropagation();
+			}
 		}
+
+		//给li 添加鼠标down事件
+		var listLi = list.getElementsByClassName('listLi');
+		var tips = $('tips');
+		for(var k=0;k<listLi.length;k++){
+			listLi[k].onmousedown = function(ev){
+				var inputele = this.getElementsByTagName('input')[0];
+				if(!inputele.checked){
+					return;
+				}
+				tips.style.display = 'block';
+				tips.innerHTML =`删除${whoChecked().length}条数据`;
+				tips.style.left = ev.clientX + 'px';
+				tips.style.top = ev.clientY + 'px';
+			}
+			document.onmouseup = function(){
+				tips.style.display = 'none';
+				tips.innerHTML =``;
+			}
+			document.onmousemove = function(ev){
+				ev.preventDefault();
+
+				tips.style.left = ev.clientX + 'px';
+				tips.style.top = ev.clientY + 'px';
+
+				if(parseInt(tips.style.left) < 100){
+					tips.style.display = 'none';
+					delCheckList();
+				}
+			}
+		}
+
+
+		
+
+
 
 		//删除功能
 		var del = $('del');
 		del.onclick = function(){
 			//删除结构
 			delCheckList();
+			console.log(innerList)
 		}
 
 		function delCheckList(){
-			var innerList = listData;
-			for(var i=0;i<checkSingle.length;i++){
-				if(checkSingle[i].checked){
-					innerList = innerList.splice(i, 1);
+			
+			var selectArr = whoChecked();
+			for(var i=0;i<selectArr.length;i++){
+				selectArr[i].parentNode.parentNode.removeChild(selectArr[i].parentNode);
+				for(var j=0;j<innerList.length;j++){
+					if(selectArr[i].dataset.id == innerList[j].id){
+						innerList.splice(j,1);
+					}
 				}
+
 			}
-			listInit(innerList);
 		}
-		
+
 		//查询那个input 被选中
 		function whoChecked(){
 			var arr = [];
@@ -126,6 +206,8 @@
 			}
 			return arr;
 		}
+
+
 
 
 
