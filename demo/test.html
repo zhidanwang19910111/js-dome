@@ -4,231 +4,134 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>拖拽文件</title>
 	<style>
-		li{
-			margin-top:10px;
-		}
-		a{
-			margin-left: 4px;
-			color:blue;
-			cursor: pointer;
-		}
-		.del{
-			margin-left: 10px;
+		#del{
+			background: #dcdcdc;
+			width:40px;
 			cursor: pointer;
 		}
 	</style>
 	<body>
+		<div id="del"><span>删除</span></div>
 		<div>
-			您已选择
-			<span id="del"></span>		
+			<span>全选</span>
+			<input type="checkbox" id="checkAll">
 		</div>
 		<ul id="list">
 			<!-- <li>
-				<span>品牌</span>
-				<a> 苹果</a>
-				<a> 苹果</a>
-				<a> 苹果</a>
+				<input type="checkbox">
+				<span>内容</span>
 			</li> -->
 		</ul>
-		<div id="shopList">
-			<!-- <img src="" style="width: 50px;height:50px;border:1px solid #dcdcdc;">
-			<span></span>
-			<span></span>
-			<span></span> -->
-		</div>
 	</body>
 	<script src="../js/dan.js"></script>
 	<script>
-		var crumbDate = [
+	let listData = [
 			{
-				title: '品牌',
-				data: ['苹果','小米','锤子','魅族','华为','三星','oppo','vivo','乐视']
+				id: '0',
+				caption: 'dan测试',
+				time: '2015-12-30',
+				desc: '拖拽'
 			},
 			{
-				title: '尺寸',
-				data: ['4.0-4.5英寸','4.6-4.9英寸','5.0-5.5英寸','6.0以上']
+				id: '1',
+				caption: 'dan后台',
+				time: '2015-12-30',
+				desc: '拖拽'
 			},
 			{
-				title: '系统',
-				data: ['android','ios','windows','无','其他']
+				id: '2',
+				caption: 'dan前端',
+				time: '2015-12-30',
+				desc: '拖拽'
 			},
 			{
-				title: '网络',
-				data: ['联通3G','双卡单4G','双卡双4g','联通4g']
+				id: '3',
+				caption: 'danphp',
+				time: '2015-12-30',
+				desc: '拖拽'
 			}
 		]
-
-		var shopList = [
-			{
-				imgUrl: '',
-				size: '4.0-4.5英寸',
-				system: 'ios',
-				www: '联通3G',
-				name: '苹果',
-				volume: 1000,
-				price: 100
-			},
-			{
-				imgUrl: '',
-				size: '4.0-4.5英寸',
-				system: 'ios',
-				www: '联通3G',
-				name: '苹果',
-				volume: 1000,
-				price: 100
-			},
-			{
-				imgUrl: '',
-				size: '4.0-4.5英寸',
-				system: 'ios',
-				www: '联通3G',
-				name: '小米',
-				volume: 1000,
-				price: 100
-			},
-			{
-				imgUrl: '',
-				size: '4.0-4.5英寸',
-				system: 'ios',
-				www: '联通3G',
-				name: '锤子',
-				volume: 1000,
-				price: 100
-			}
-		]
-		var crumbDateLen = crumbDate.length;
-
 		//根据数据生成html
-		var crumbHTML = '';
-		var list = $('list');
-		for(var i=0;i<crumbDateLen;i++){
-			var astr = ''
-			for(var j=0;j<crumbDate[i].data.length;j++){
-				astr += `
-					<a clss="alist"> ${crumbDate[i].data[j]}</a>
-				`
+		
+		var list = $('list')
+		listInit(listData);
+		function listInit(listData){
+			var listHtml = '';
+			for(var i=0;i<listData.length;i++){
+			listHtml += `
+				<li>
+					<input class="checkSingle" type="checkbox">
+					<span>${listData[i].desc}</span>
+				</li>
+			`
 			}
-			crumbHTML += `
-					<li>
-						<span>${crumbDate[i].title}</span>
-						${astr}
-					</li>`
+			list.innerHTML = listHtml;
 		}
-		list.innerHTML = crumbHTML;
+		
 
-		//为元素绑定事件
-		var aList = null;
-		var chooseObj = {};
-		var liList = list.getElementsByTagName('li');
-		for(var k=0;k<liList.length;k++){
-			liList[k].provEle = null;
-			liList[k].index = k;
-			var aList = liList[k].getElementsByTagName('a');
-			for(var m=0;m<aList.length;m++){
-				aList[m].onclick = function(){
-					var parent = this.parentNode;
-					if(parent.provEle){
-						parent.provEle.style.color = '';
+		//全选功能
+
+		var checkAll = $('checkAll');
+		var checkSingle = list.getElementsByClassName('checkSingle');
+		checkAll.onclick = function(){
+			
+			for(var i=0;i<checkSingle.length;i++){
+				checkSingle[i].checked = this.checked;
+			}
+		}
+
+		//单选功能
+
+		for(var j=0;j<checkSingle.length;j++){
+			checkSingle[j].onclick = function(){
+				if(!this.checked){
+					checkAll.checked = false;
+				}else{
+					this.cleckAllFlag = false;
+					for(var k=0;k<checkSingle.length;k++){
+						if(!checkSingle[k].checked){
+							this.cleckAllFlag = true;
+							break;
+						}
 					}
-					parent.provEle = this;
-					this.style.color = 'red';
-
-					chooseObj[parent.index] = this.innerText;
-
-					chooseHandle();
-
-					delList();
-
-					filterObj[filterItem[parent.index]] = this.innerText;
-					filterHandle();
-
-					filterShopList();
+					checkAll.checked = this.cleckAllFlag ? false : true;
 				}
 			}
 		}
 
-
-		//点击之后生成已经选中的html
+		//删除功能
 		var del = $('del');
+		del.onclick = function(){
+			//删除结构
+			delCheckList();
+		}
 
-		function chooseHandle(){
-			var selectStr = '';
-			for(var j=0;j<liList.length;j++){
-				if(chooseObj[j]){
-					selectStr += `
-						<span><span>${chooseObj[j]}</span><b data-index="${j}" class="del">X</b></span>
-					`
+		function delCheckList(){
+			var innerList = listData;
+			for(var i=0;i<checkSingle.length;i++){
+				if(checkSingle[i].checked){
+					innerList = innerList.splice(i, 1);
 				}
 			}
-			del.innerHTML = selectStr;
+			listInit(innerList);
 		}
 		
-		// 点击删除，删除数据
-		function delList(){
-			var delList = del.getElementsByClassName('del');
-			for(var d=0;d<delList.length;d++){
-				delList[d].onclick = function(){
-					this.parentNode.parentNode.removeChild(this.parentNode);
-					delete chooseObj[this.dataset.index];
-					liList[this.dataset.index].provEle.style.color = '';
-
-					console.log(filterObj)
-					delete filterObj[filterItem[this.dataset.index]];
-					console.log(filterObj)
-					filterShopList();
+		//查询那个input 被选中
+		function whoChecked(){
+			var arr = [];
+			for(var i=0;i<checkSingle.length;i++){
+				if(checkSingle[i].checked){
+					arr.push(checkSingle[i]);
 				}
-
 			}
-		}
-		
-		// 根据筛选条件生成列表
-		var filterItem = ['name','size','system','www'];
-		var filterObj = {};
-
-		function filterHandle(){
-			var filterArr = shopList;
-			for(var attr in filterObj){
-				filterArr = filterArr.filter(function(obj){
-					return obj[attr] == filterObj[attr];
-				})
-			}
-			return filterArr;
+			return arr;
 		}
 
-		//筛选列表
-		var shopListEle = $('shopList');
-		shopListInit();
-		function shopListInit(){
-			var shoplistStr = '';
-			for(var i=0;i<shopList.length;i++){
 
-				shoplistStr += `
-					<div>
-						<img src="${shopList[i].imgUrl}" style="width: 50px;height:50px;border:1px solid #dcdcdc;">
-						<span>${shopList[i].name}</span>
-						<span>${shopList[i].name}</span>
-						<span>${shopList[i].name}</span>
-					</div>
-					`
-			}
-			shopListEle.innerHTML = shoplistStr;
 
-		}
-		function filterShopList(){
-			var shoplistStr = '';
-			var filterArr = filterHandle()
-			for(var i=0;i<filterArr.length;i++){
-				shoplistStr += `
-					<div>
-						<img src="${filterArr[i].imgUrl}" style="width: 50px;height:50px;border:1px solid #dcdcdc;">
-						<span>${filterArr[i].name}</span>
-						<span>${filterArr[i].size}</span>
-						<span>${filterArr[i].www}</span>
-					</div>
-					`
-			}
-			shopListEle.innerHTML = shoplistStr;
-		}
+
+
+
 
 
 

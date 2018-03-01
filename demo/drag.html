@@ -87,14 +87,14 @@
 		var html = list.map(function(item){
 			return `
 				<li>
-				<input data-id=${item.id} type="checkbox">
-				<div>
-					<span>${item.caption}</span>
-					<span>${item.time}</span>
-				</div>
-				<p>${item.desc}</p>
-			</li>	
-			`;
+					<input data-id=${item.id} type="checkbox">
+					<div>
+						<span>${item.caption}</span>
+						<span>${item.time}</span>
+					</div>
+					<p>${item.desc}</p>
+				</li>	
+				`;
 		})
 		$('emailList').innerHTML = html.join('');
 
