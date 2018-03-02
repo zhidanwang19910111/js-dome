@@ -169,6 +169,30 @@ function bind(obj, evname, fn){
   }
 }
 
+/*
+  author:dan
+  time: 2018-03-01
+  usage: 判断两个元素是否碰撞
+  params: obj1, obj2
+*/
+function isCollision(obj1, obj2){
+  var L1 = obj1.offsetLeft;//第一个元素的左边位置
+  var R1 = obj1.offsetLeft + obj1.offsetWidth;//第一个元素的右边位置
+  var T1 = obj1.offsetTop;//第一个元素的上边边位置
+  var B1 = obj1.offsetTop + obj1.offsetHeight;//第一个元素的下边位置
+
+  var L2 = obj2.offsetLeft;//第一个元素的左边位置
+  var R2 = obj2.offsetLeft + obj2.offsetWidth;//第一个元素的右边位置
+  var T2 = obj2.offsetTop;//第一个元素的上边边位置
+  var B2 = obj2.offsetTop + obj2.offsetHeight;//第一个元素的下边位置
+
+  if(R1 < L2 || L1 > R2 || B1 < T2 || T1 > B2){
+    return false;
+  }else{
+    return true;
+  }
+}
+
 
 
 

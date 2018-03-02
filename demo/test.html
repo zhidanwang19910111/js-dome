@@ -2,20 +2,33 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>拖拽文件</title>
+	<title>限制范围的拖拽div</title>
 	<style>
+	html{
+		height: 100%;
+	}
+	body{
+		width:100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
 	#div1{
 		width: 100px;
 		height: 100px;
 		background: red;
 		position: absolute;
 		left: 0;
-		top: 0;
+		top: 0px;
 	}
 	#div2{
 		width: 100px;
 		height: 100px;
 		background: blue;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+
 	}
 	#div3{
 		width: 50px;
@@ -27,70 +40,48 @@
 		<div id="div1">
 			
 		</div>
+
+		<div id="div2">
+			
+		</div>
 	</body>
 	<script src="../js/dan.js"></script>
 	<script>
-		var oDiv = document.getElementById('div1');
-            var left = false;
-            var right =false;
-            var up = false;
-            var dw = false;
-            setInterval( function(){
-                if (left){
-                    console.log(oDiv)
-                    oDiv.style.left = oDiv.offsetLeft-5+'px';
-                }
-                else if (up) {
-                    oDiv.style.top = oDiv.offsetTop-5+'px';
-                }
-                else if (right) {
-                console.log(oDiv);
-                    oDiv.style.left = oDiv.offsetLeft+5+'px';
+	var obj1 = $('div1');
+	var obj2 = $('div2');
+	obj1.onmousedown = function(ev){
 
-                }
-                else if (dw) {
-                    oDiv.style.top = oDiv.offsetTop+10+'px';
-                }
-            },100)
+		var disX = ev.clientX - obj1.offsetLeft;
+		var disY = ev.clientY - obj1.offsetTop;
 
-        document.onkeydown=function (ev){
-            var ev = ev || event;
-            var  code= ev.keyCode;
-            switch (code) {
-                case 37:
-                left = true;
-                break;
-                case 38:
-                up = true;
-                break;
-                case 39:
-                right = true;
-                break;
-                case 40:
-                dw = true;
-                break;
-            }
-     	}
+		document.onmousemove = function(ev){
+			obj1.style.left = ev.clientX - disX + 'px';
+			obj1.style.top = ev.clientY - disY + 'px';
 
-        document.onkeyup =function(ev){
-            var ev = ev || event;
-            var code = ev.keyCode;
-            switch (code) {
-                case 37:
-                left = false;
-                break;
-                case 38:
-                up = false;
-                break;
-                case 39:
-                right = false;
-                break;
-                case 40:
-                dw = false;
-                break;
-            }
+			var dash = isCollision(obj1, obj2);
+			console.log(dash)
+			function isCollision(obj1, obj2){
+				var L1 = obj1.offsetLeft;//第一个元素的左边位置
+				var R1 = obj1.offsetLeft + obj1.offsetWidth;//第一个元素的右边位置
+				var T1 = obj1.offsetTop;//第一个元素的上边边位置
+				var B1 = obj1.offsetTop + obj1.offsetHeight;//第一个元素的下边位置
 
-        }
+				var L2 = obj2.offsetLeft;//第一个元素的左边位置
+				var R2 = obj2.offsetLeft + obj2.offsetWidth;//第一个元素的右边位置
+				var T2 = obj2.offsetTop;//第一个元素的上边边位置
+				var B2 = obj2.offsetTop + obj2.offsetHeight;//第一个元素的下边位置
 
+				if(R1 < L2 || L1 > R2 || B1 < T2 || T1 > B2){
+					return false;
+				}else{
+					return true;
+				}
+			}
+		}
+		document.onmouseup = function(ev){
+			document.onmousemove = document.onmouseup = null;
+		}
+	}
+	
 	</script>
 </html>

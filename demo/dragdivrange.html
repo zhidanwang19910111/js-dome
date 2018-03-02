@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>限制范围的拖拽div</title>
+	<style>
+	html{
+		height: 100%;
+	}
+	body{
+		width:100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	#div1{
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: absolute;
+		left: 0;
+		top: 100px;
+	}
+	#div2{
+		width: 100px;
+		height: 100px;
+		background: blue;
+	}
+	#div3{
+		width: 50px;
+		height: 50px;
+		background: yellow;
+	}
+	</style>
+	<body>
+		ddddddddd
+		<div id="div1">
+			
+		</div>
+
+		<div id="div2">
+			
+		</div>
+	</body>
+	<script src="../js/dan.js"></script>
+	<script>
+	var div1 = $('div1');
+	div1.onmousedown = function(ev){
+		var ev = ev || event;
+		var disX = ev.clientX - this.offsetLeft;
+		var disY = ev.clientY - this.offsetTop;
+		stopDefault(ev);
+
+		document.onmousemove = function(ev){
+			var L = ev.clientX - disX;
+			var T = ev.clientY  - disY;
+			
+			if(L<100){
+				L = 0;
+			}else if(L > document.body.clientWidth - div1.offsetWidth){
+				L = document.body.clientWidth - div1.offsetwidth;
+			}
+			if(T<0){
+				T = 0;
+			}else if(T > (document.body.clientHeight - div1.offsetHeight)){
+				T = document.body.clientHeight - div1.offsetHeight;
+			}
+			ev = ev || event;
+			div1.style.left = L + 'px';
+			div1.style.top = T + 'px';
+			
+		}
+
+		document.onmouseup = function(ev){
+			document.onmousemove = document.onmouseup = null;
+		}
+	}
+	
+	</script>
+</html>
