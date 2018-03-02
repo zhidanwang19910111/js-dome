@@ -83,7 +83,91 @@ function strCount(str, strTime){
   return occurTime;
 }
 
+/*
+  author:dan
+  time: 2018-03-01
+  usage: 判断浏览器的型号
+  params: null
+  return: ['bowserType', 'version']
+*/
+function browser (){
+  var ua=window.navigator.userAgent,
+      ret="";
+  //判断为火狐
+  if(/Firefox/g.test(ua)){
 
+    ua=ua.split(" ");
+    ret="Firefox|"+ua[ua.length-1].split("/")[1];
+  }
+  //判断为ie
+  else if(/MSIE/g.test(ua)){
+
+    ua=ua.split(";");
+    ret="IE|"+ua[1].split(" ")[2];
+
+  }
+  //判断为opera
+  else if(/Opera/g.test(ua)){
+
+    ua=ua.split(" ");
+    ret="Opera|"+ua[ua.length-1].split("/")[1];
+
+  }
+  //判断为chrome
+  else if(/Chrome/g.test(ua)){
+
+    ua=ua.split(" ");
+    ret="Chrome|"+ua[ua.length-2].split("/")[1];
+
+  }
+  //判断为苹果浏览器
+  else if(/^apple\s+/i.test(navigator.vendor)){
+
+    ua=ua.split(" ");
+    ret="Safair|"+ua[ua.length-2].split("/")[1];
+
+  }else{
+      ret="unknown|unknown";
+  }
+
+  return ret.split("|");
+}
+
+/*
+  author:dan
+  time: 2018-03-01
+  usage: 阻止元素的冒泡
+  params: event
+*/
+function stoppropagation(e){
+  window.event? window.event.cancelBubble = true : e.stopPropagation();
+}
+
+/*
+  author:dan
+  time: 2018-03-01
+  usage: 阻止浏览器的默认行为
+  params: event
+*/
+function stopDefault(e){
+  window.event? window.event.returnValue = false : e.preventDefault();
+}
+
+/*
+  author:dan
+  time: 2018-03-01
+  usage: 给一个元素绑定事件
+  params: event
+*/
+function bind(obj, evname, fn){
+  if(obj.addEventListener){
+    obj.addEventListener(evname, fn, false);
+  }else{
+    obj.attachEvent('on' + evname, function(){
+      fn.call(obj);
+    })
+  }
+}
 
 
 
