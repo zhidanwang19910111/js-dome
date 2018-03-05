@@ -193,6 +193,32 @@ function isCollision(obj1, obj2){
   }
 }
 
+/*
+  author:dan
+  time: 2018-03-05
+  usage: 获取cookie的value值
+  params: key (cookie的key)
+*/
+function getCookie(key){
+  var arr = document.cookie.split('; ');
+  for(var i=0;i<arr.length;i++){
+    var arr2 = arr[i].split('=');
+    if(arr2[0] == key){
+      return decodeURI(arr2[1]);
+    }
+  }
+}
 
+/*
+  author:dan
+  time: 2018-03-05
+  usage: 存一个cookie
+  params: key (cookie的key)
+*/
+function setCookie(key, value, expires){
+  var oDate = new Date();
+  oDate.setDate(oDate.getDate() + expires);
+  document.cookie = `${key}=${value};expires=${oDate.toGMTString()}`;
+}
 
 
