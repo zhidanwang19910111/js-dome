@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>限制范围的拖拽div</title>
+	<style>
+	#div1{
+		width: 200px;
+		height: 400px;
+		background: #dcdcdc;
+		position: absolute;
+		left: 30%;
+		top: 30%;
+	}
+	</style>
+	<body>
+		<div id="div1">
+			
+		</div>
+	</body>
+	<script src="../js/dan.js"></script>
+	<script>
+		var div1 = $('div1');
+		div1.onmousedown = function(ev){
+			var ev = ev || event;
+			var b = '';
+			var dWidth = div1.offsetWidth;
+			var mouseX = ev.clientX;
+			var dLeft = div1.offsetLeft;
+			if(ev.clientX > (div1.offsetWidth + div1.offsetLeft - 10)){
+				b = 'right';
+			}
+			else if(ev.clientX < (div1.offsetLeft + 10)){
+				b = 'left';
+			}
+			document.onmousemove = function(ev){
+				var ev = ev || event;
+				switch (b) {
+					case 'left':
+						div1.style.width = (dWidth - (ev.clientX - mouseX)) + 'px';
+						div1.style.left = (dLeft + (ev.clientX - mouseX)) + 'px';
+						break;
+					case 'right':
+						div1.style.width = (dWidth + (ev.clientX - mouseX)) + 'px';
+						break;
+					default:
+						// statements_def
+						break;
+				}
+			}
+
+			document.onmouseup = function(){
+				document.onmousemove = null;
+				return false;
+			}
+		}
+	</script>
+</html>
