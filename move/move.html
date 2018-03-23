@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>运动</title>
+	<style>
+		body{
+			padding: 0;
+			margin: 0;
+		}
+		#div1{
+			position: absolute;
+			left: 100px;
+			top: 100px;
+			width: 100px;
+			height: 100px;
+			background: red;
+		}
+		
+	</style>
+	<body>
+		<div id="div1">
+			<div id="div2">分享到</div>
+		</div>
+
+	</body>
+	<script src="../js/dan.js"></script>
+	<script src="../js/move.js"></script>
+	<script>
+		var obj = $('div1');
+		obj.onclick = function(){
+			var speed = 10;
+			startMove(obj,'left', '800', 10, 20);
+			
+		}
+
+		function startMove (obj, style, target, speed, seconds) {
+			 
+			clearInterval(obj.timer)
+			obj.timer = setInterval(function(){
+
+				speed = (target - obj.offsetLeft) / 20;
+				speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+
+				console.log(speed)
+				if(speed == 0){
+					clearInterval(obj.timer)
+				}
+
+				obj.style[style] = parseInt(getStyle(obj, 'left')) + speed + 'px';
+				if(obj.offsetLeft > target){
+					clearInterval(obj.timer)
+					obj.style[style] = target + 'px';
+				}
+				if(obj.offsetLeft < 0){
+					clearInterval(obj.timer)
+					obj.style[style] = 0;
+				}
+			}, seconds)
+		}
+	</script>
+</html>
