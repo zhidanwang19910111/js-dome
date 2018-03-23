@@ -26,20 +26,7 @@ function doMove ( obj, attr, dir, target, seconds, endFn ) {
   }, seconds);
 }
 
-/*
-  author:dan
-  time: 2018-01-15
-  usage: 获取一个元素
-  params: 
-   1.获取一个元素 ele
-   2.获取一个属性 attr
-   3.方向 dir（步进速度）
-   4.秒数 seconds
-   5.执行完当前之后的回调
-*/
-function opacityMove(){
 
-}
 
 
 
