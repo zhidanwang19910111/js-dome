@@ -4,46 +4,106 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>无标题文档</title>
 <style>
-#div1{ width:100px; height:100px; background:red; position:absolute; left:0;}
-#bg{ width:1px; height:500px; background:black; position:absolute; left:500px; top:0;}
+body{
+	margin: 0;
+	padding: 0;
+}
+ul{
+	list-style: none;
+	position: relative;
+	margin:0;
+	padding: 0;
+	width: 400px;
+	margin: 10px auto;
+	height: 30px;
+}
+li{
+	float:left;
+	margin-right: 10px;
+	width: 60px;
+	height: 30px;
+	background-color: pink;
+}
+#mark{
+	/*height: 10px;*/
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: blue;
+}
 </style>
-<script>
-window.onload = function(){
-	var oInput = document.getElementById('input1');
-	var oDiv = document.getElementById('div1');
-	
-	var timer = null;
-	var iSpeed = 0;
-	
-	oInput.onclick = function(){
-		startMove();
-	};
-	
-	function startMove(){
-		clearInterval(timer);
-		timer = setInterval(function(){
-			
-			/*if( oDiv.offsetLeft < 500 ){
-				iSpeed += (500 - oDiv.offsetLeft)/50;
-			}
-			else{
-				iSpeed -= (oDiv.offsetLeft - 500)/50;
-			}*/
-			
-			iSpeed += (500 - oDiv.offsetLeft)/90;
-			
-			oDiv.style.left = oDiv.offsetLeft + iSpeed + 'px';
-			
-		},30);
-	}
-	
-};
-</script>
 </head>
 
 <body>
-<input type="button" value="开始运动" id="input1">
-<div id="div1"></div>
-<div id="bg"></div>
+<ul id="ul1">
+	<li id="mark"></li>
+	<li class="box">首页</li>
+    <li class="box">论坛</li>
+    <li class="box">视频</li>
+    <li class="box">留言</li>
+</ul>
+<script>
+var oLi = document.getElementsByTagName('li');
+var mask = document.getElementById('mark');
+var timer1 = null;
+for(var i=0;i< oLi.length;i++){
+	oLi[i].onmouseover = function () {
+		clearTimeout(timer1)
+		elasticMove(mask, 'left', this.offsetLeft, 0, 30);
+	}
+	oLi[i].onmouseout = function () {
+		timer1 = setTimeout(function(){
+			elasticMove(mask, 'left', 0, 0, 30);
+		},100)
+		
+	}
+}
+mask.onmouseover = function (){
+	clearTimeout(timer1)
+}
+mask.onmouseout = function () {
+	timer1 = setTimeout(function(){
+		elasticMove(mask, 'left', 0, 0, 30);
+	},100)
+	
+}
+var timer = null;
+function elasticMove(element, style, target, speed, seconds){
+	clearInterval(element.timer);
+	element.timer = setInterval(function(){
+		speed += (target - element.offsetLeft) / 7;
+		speed *= 0.7;
+		if(Math.abs(speed) <= 1 && Math.abs(target - element.offsetLeft) <= 1){
+			clearInterval(element.timer);
+			element.style[style] = target + 'px';
+			speed = 0;
+		}else{
+			element.style[style] = element.offsetLeft + speed + 'px';
+		}
+	},seconds)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 </body>
 </html>

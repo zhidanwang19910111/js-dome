@@ -32,6 +32,7 @@ window.onload = function(){
 			
 			iSpeed += (500 - oDiv.offsetLeft)/90;
 			
+			
 			oDiv.style.left = oDiv.offsetLeft + iSpeed + 'px';
 			
 		},30);

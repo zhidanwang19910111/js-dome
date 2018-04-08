@@ -194,4 +194,25 @@ function setCookie(key, value, expires){
   document.cookie = `${key}=${value};expires=${oDate.toGMTString()}`;
 }
 
+/*
+  author:dan
+  time: 2018-04-08
+  usage: 让一个元素做弹性运动
+  params: 
+*/
+function elasticMove(element, style, target, speed, seconds){
+  clearInterval(element.timer);
+  element.timer = setInterval(function(){
+    speed += (target - element.offsetLeft) / 7;
+    speed *= 0.7;
+    if(Math.abs(speed) <= 1 && Math.abs(target - element.offsetLeft) <= 1){
+      clearInterval(element.timer);
+      element.style[style] = target + 'px';
+      speed = 0;
+    }else{
+      element.style[style] = element.offsetLeft + speed + 'px';
+    }
+  },seconds)
+}
+
 
