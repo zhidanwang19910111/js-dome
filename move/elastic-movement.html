@@ -6,6 +6,28 @@
 <style>
 #div1{ width:100px; height:100px; background:red; position:absolute; left:0;}
 #bg{ width:1px; height:500px; background:black; position:absolute; left:500px; top:0;}
+
+#div2,#div3{
+	position: absolute;
+	left: 600px;
+	top: 0;
+}
+#div3{
+	color: red;
+	width: 16px;
+	height: 20px;
+	/*width: 15px;
+	height: 16px;*/
+	overflow: hidden;
+	z-index: 10;
+
+}
+#div3 span{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 800px;
+}
 </style>
 <script>
 window.onload = function(){
@@ -37,6 +59,16 @@ window.onload = function(){
 			
 		},30);
 	}
+
+	var oDiv3 = document.getElementById('div3');
+	var oSpan3 = oDiv3.getElementsByTagName('span')[0];
+	
+	setInterval(function(){
+		
+		oDiv3.style.left = oDiv3.offsetLeft + 1 + 'px';
+		oSpan3.style.left = oSpan3.offsetLeft - 1 + 'px';
+		
+	},100);
 	
 };
 </script>
@@ -46,5 +78,8 @@ window.onload = function(){
 <input type="button" value="开始运动" id="input1">
 <div id="div1"></div>
 <div id="bg"></div>
+
+<div id="div2"><span>胜利大街发了圣诞节福利了费德勒</span></div>
+<div id="div3"><span>胜利大街发了圣诞节福利了费德勒</span></div>
 </body>
 </html>
