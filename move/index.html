@@ -4,128 +4,45 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>无标题文档</title>
 <style>
-body{
-	margin: 0;
-	padding: 0;
-}
-ul{
-	list-style: none;
-	position: relative;
-	margin:0;
-	padding: 0;
-	width: 400px;
-	margin: 10px auto;
-	height: 30px;
-}
-li{
-	float:left;
-	margin-right: 10px;
-	width: 60px;
-	height: 30px;
-	background-color: pink;
-}
-#mark{
-	/*height: 10px;*/
-	position: absolute;
-	left: 0;
-	top: 0;
-	overflow: hidden;
-}
-#mark ul{
-	margin: 0;
-	width: 428px;
-	position: absolute;
-	left: 0;
-	top: 0;
-	color: white;
-}
-#mark ul li{
-	background-color: blue;
-}
+#div1{ width:100px; height:100px; background:red; position:absolute;}
+.box{ border:1px #000 solid; position:absolute;}
 </style>
+<script>
+window.onload = function(){
+	var oDiv = document.getElementById('div1');
+	
+	var disX = 0;
+	var disY = 0;
+	
+	oDiv.onmousedown = function(ev){
+		var ev = ev || window.event;
+		disX = ev.clientX - oDiv.offsetLeft;
+		disY = ev.clientY - oDiv.offsetTop;
+		
+		document.onmousemove = function(ev){
+			var ev = ev || window.event;
+			oDiv.style.left = ev.clientX - disX + 'px';
+			oDiv.style.top = ev.clientY - disY + 'px';
+			
+			var oBox = document.createElement('div');
+			oBox.className = 'box';
+			document.body.appendChild(oBox);
+			oBox.style.left = ev.clientX + 'px';
+			oBox.style.top = ev.clientY + 'px';
+			
+		};
+		document.onmouseup = function(){
+			document.onmousemove = null;
+			document.onmouseup = null;
+		};
+		return false;
+	};
+	
+};
+</script>
 </head>
 
 <body>
-<ul id="ul1">
-	<li id="mark">
-		<ul id="masUl">
-			<li>首页</li>
-		    <li>论坛</li>
-		    <li>视频</li>
-		    <li>留言</li>
-		</ul>
-	</li>
-	<li class="box">首页</li>
-    <li class="box">论坛</li>
-    <li class="box">视频</li>
-    <li class="box">留言</li>
-</ul>
-<script>
-var oLi = document.getElementsByClassName('box');
-var mask = document.getElementById('mark');
-var timer1 = null;
-var masUl = document.getElementById('masUl');
-for(var i=0;i< oLi.length;i++){
-	oLi[i].onmouseover = function () {
-		clearTimeout(timer1)
-		elasticMove(mask, 'left', this.offsetLeft, 0, 30);
-		elasticMove(masUl, 'left', -this.offsetLeft, 0, 30);
-	}
-	oLi[i].onmouseout = function () {
-		timer1 = setTimeout(function(){
-			elasticMove(mask, 'left', 0, 0, 30);
-			elasticMove(masUl, 'left', 0, 0, 30);
-		},100)
-		
-	}
-}
-mask.onmouseover = function (){
-	clearTimeout(timer1)
-}
-mask.onmouseout = function () {
-	timer1 = setTimeout(function(){
-		elasticMove(mask, 'left', 0, 0, 30);
-		elasticMove(masUl, 'left', 0, 0, 30);
-	},100)
-	
-}
-var timer = null;
-function elasticMove(element, style, target, speed, seconds){
-	clearInterval(element.timer);
-	element.timer = setInterval(function(){
-		speed += (target - element.offsetLeft) / 7;
-		speed *= 0.7;
-		if(Math.abs(speed) <= 1 && Math.abs(target - element.offsetLeft) <= 1){
-			clearInterval(element.timer);
-			element.style[style] = target + 'px';
-			speed = 0;
-		}else{
-			element.style[style] = element.offsetLeft + speed + 'px';
-		}
-	},seconds)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
+<div id="div1"></div>
 </body>
 </html>
