@@ -2,89 +2,35 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>无标题文档</title>
+<title>twee.js</title>
 <style>
-#div1{ width:100px; height:100px; background:red; position:absolute;opacity: 0.8;border-radius: 100%;}
+#div1{ width:100px; height:100px; background:red; position:absolute;opacity: 0.8;}
 .little{
 	border:1px #000 solid; position:absolute;
 }
 </style>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="js/twee.js"></script>
 <script>
+	/*
+	t: current time(当前时间)
+	b: beginning time(初始值)
+	c: change in value (变化值)
+	d: duration(持续时间)
+	return (目标点)
+	*/
 window.onload = function(){
 	var oDiv = document.getElementById('div1');
+	oDiv.onmouseover = function(){
+		var t = 0;
+		var b = 100;
+		var c = 100;
+		var d = 2s;
 
-	var prevX = 0;
-	var prevY = 0;
 
-	var iSpeedX = 0;
-	var iSpeedY = 0;
 
-	var timer = null;
+	}
 	
-	oDiv.onmousedown = function (ev) {
-		var disX = ev.clientX - oDiv.offsetLeft;
-		var disY = ev.clientY - oDiv.offsetTop;
-
-		prevX = ev.clientX;
-		prevY = ev.clientY;
-
-		document.onmousemove = function (ev) {
-			oDiv.style.left = ev.clientX - disX + 'px';
-			oDiv.style.top = ev.clientY - disY + 'px';
-
-			iSpeedX = ev.clientX - prevX;
-			iSpeedY = ev.clientY - prevY;
-
-			prevX = ev.clientX;
-			prevY = ev.clientY;
-
-		}
-		document.onmouseup = function(ev){
-			document.onmousemove = null;
-			document.onmouseup = null;
-
-			startMove(ev);
-		}
-	}
-
-	function startMove (ev) {
-		clearInterval(timer);
-		timer = setInterval(function(){
-			
-			iSpeedY += 3;
-			
-			var L = oDiv.offsetLeft + iSpeedX;
-			var T = oDiv.offsetTop + iSpeedY;
-			
-			if(T>document.documentElement.clientHeight - oDiv.offsetHeight){
-				T = document.documentElement.clientHeight - oDiv.offsetHeight;
-				iSpeedY *= -1;
-				iSpeedY *= 0.75;
-				iSpeedX *= 0.75;
-			}
-			else if(T<0){
-				T = 0;
-				iSpeedY *= -1;
-				iSpeedY *= 0.75;
-			}
-			
-			if(L>document.documentElement.clientWidth - oDiv.offsetWidth){
-				L = document.documentElement.clientWidth - oDiv.offsetWidth;
-				iSpeedX *= -1;
-				iSpeedX *= 0.75;
-			}
-			else if(L<0){
-				L = 0;
-				iSpeedX *= -1;
-				iSpeedX *= 0.75;
-			}
-			
-			oDiv.style.left = L + 'px';
-			oDiv.style.top = T + 'px';
-			
-		},30);
-	}
-
 	
 };
 </script>
