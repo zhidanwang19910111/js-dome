@@ -9,16 +9,21 @@
         var btn = document.getElementById('btn');
         btn.onclick = function(){
             //1.创建xmlHttpRequest 对象
-            try {
-                console.log(a);
-                throw new Error('错误')
-            } catch (e){
-                // console.log(e)
+            var xhr = null;
+            if(window.XMLHttpRequest){
+                xhr = new XMLHttpRequest();
+            }else{
+                xhr = new ActiveXObject('Microsoft.XMLHTTP');
             }
-            
-            var xhr = new XMLHttpRequest();
 
-            //在地址栏输入地址
+            //2.open方法
+            /*
+                参数
+                    1.打开方式
+                    2.地址
+                    3.
+                
+            */
             xhr.open('post','http://127.0.0.1:1333/',true);
             //提交
             xhr.send();
