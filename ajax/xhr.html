@@ -9,28 +9,48 @@
         var btn = document.getElementById('btn');
         btn.onclick = function(){
             //1.创建xmlHttpRequest 对象
-            var xhr = null;
-            if(window.XMLHttpRequest){
-                xhr = new XMLHttpRequest();
-            }else{
-                xhr = new ActiveXObject('Microsoft.XMLHTTP');
+            try {
+                console.log(a);
+                throw new Error('错误')
+            } catch (e){
+                // console.log(e)
             }
+            
+            var xhr = new XMLHttpRequest();
 
-            //2.open方法
-            /*
-                参数
-                    1.打开方式
-                    2.地址
-                    3.
-                
-            */
+
+            // 2.在地址栏输入地址
+
+                /*
+                    参数
+                        1. 请求方式 post get ...
+                        2. 请求地址   
+                        3. true or false 同步或者异步
+
+
+                */
             xhr.open('post','http://127.0.0.1:1333/',true);
-            //提交
+
+            // 3.发送请求
             xhr.send();
             
-            //等待服务器返回内容
+            // 4.等待服务器返回内容
+
+                /*
+                    readyState : ajax工作状态 
+                        0: 初始化，还没调用 open 方法
+                        1: 载入， 已经调用send方法，正在发送请求
+                        2: 载入完成，send方法完成，已收到全部响应
+                        3: 解析，正在解析响应内容
+                        4: 完成，响应内容解析完成，可以在用户端使用了
+                    responseText : ajax请求返回的内容就被存放到这个属性下面
+
+                    on readystate change : 当readyState改变的时候触发
+                    
+                    status : 服务器状态，http状态码 
+                */
             xhr.onreadystatechange = function() {
-                
+                console.log(xhr.readyState)
                 if ( xhr.readyState == 4 ) {
                     console.log( JSON.parse(xhr.responseText));
                 } 

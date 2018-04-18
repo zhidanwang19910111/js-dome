@@ -5,31 +5,21 @@
     <body>
         <button id="btn">点击</button>
     </body>
+    <script src="../js/ajax.js"></script>
     <script>
         var btn = document.getElementById('btn');
         btn.onclick = function(){
-            //1.创建xmlHttpRequest 对象
-            try {
-                console.log(a);
-                throw new Error('错误')
-            } catch (e){
-                // console.log(e)
-            }
-            
-            var xhr = new XMLHttpRequest();
-
-            //在地址栏输入地址
-            xhr.open('post','http://127.0.0.1:1333/',true);
-            //提交
-            xhr.send();
-            
-            //等待服务器返回内容
-            xhr.onreadystatechange = function() {
-                
-                if ( xhr.readyState == 4 ) {
-                    console.log( JSON.parse(xhr.responseText));
-                } 
-            }
+            Ajax({
+                type: 'post',
+                url: 'http://127.0.0.1:1333/',
+                data: {
+                    age: 1,
+                    male: 'sdfdf'
+                },
+                success: function(res){
+                    console.log(res);
+                }
+            })
         }
     </script>
 </html>
