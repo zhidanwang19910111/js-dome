@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+    </head>
+    <body>
+        <button id="btn">点击</button>
+    </body>
+    <script src="../js/ajax.js"></script>
+    <script>
+        //https://m.douban.com/rexxar/api/v2/muzzy/columns/10008/items?start=0&count=3
+        var btn = document.getElementById('btn');
+        btn.onclick = function(){
+            Ajax({
+                type: 'get',
+                url: '127.0.0.1:1333',
+                data: {
+                    start: 0,
+                    count: 3
+                },
+                success: function(res){
+                    console.log(res);
+                }
+            })
+        }
+    </script>
+</html>

@@ -1,4 +1,4 @@
-//type, url, data, success, failed
+//type, url, data, success, error
 function Ajax(obj){
     // 创建ajax对象
     var xhr = null;
@@ -41,8 +41,8 @@ function Ajax(obj){
             if(xhr.status == 200){
                 obj.success && obj.success(xhr.responseText);
             } else {
-                if(failed){
-                   obj.failed && obj.failed(xhr.status);
+                if(obj.error){
+                   obj.error && obj.error(xhr.status);
                 }
             }
         }
