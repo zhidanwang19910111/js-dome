@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>限制范围的拖拽div</title>
+	<style>
+	
+	</style>
+	<body>
+		
+	</body>
+	<script>
+		/*var arr = [1,2,4];
+		arr.number = 111;
+		console.log(arr)
+		arr.alert = function(){
+			alert('123')
+		}
+		console.log(arr.alert);*/
+
+		/*var name = 'dan'
+		var obj = new Object();
+		obj.name = 'xiaoming';
+		obj.showName = function(){
+
+			console.log(this)
+		}
+		obj.showName.call(window);*/
+
+		// 工厂方式
+
+		/*function Person(name) {
+			var obj = new Object();
+			obj.name = name;
+			obj.showName = function(){
+				console.log(this.name)
+			}
+			return obj;
+		}*/
+
+		//可以简化为
+
+		function Person1(name) {
+			console.log(this)
+			this.name = name;
+			this.showName = function(){
+				console.log(this.name)
+			}
+			// 隐试默认return this    return this;
+		}
+
+
+
+		var p1 = Person1('xiaoming');
+		window.showName();
+		console.log(p1)
+
+		var p2 = new Person1('hong');
+		console.log(p2.showName)
+
+	</script>
+</html>
