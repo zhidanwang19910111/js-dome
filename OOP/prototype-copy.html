@@ -28,7 +28,8 @@
 
 
 	
-	PersonStar.prototype = Person.prototype;
+	// PersonStar.prototype = Person.prototype;
+	extend(Person.prototype, PersonStar.prototype)
 
 	PersonStar.prototype.showJob = function(){
 		console.log(this.job)
@@ -36,6 +37,11 @@
 	console.log(p2)
 	console.log(p1)
 
+	function extend(obj1, obj2){
+		for(let attr in obj1){
+			obj2[attr] = obj1[attr]
+		}
+	}
 
 
 </script>
